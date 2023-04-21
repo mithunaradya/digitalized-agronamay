@@ -5,6 +5,8 @@ function App() {
   const [form, setForm] = useState({});
   const [users, setUsers] = useState([]);
 
+
+
   const handleForm = (e)=>{
     setForm({
       ...form,
@@ -37,6 +39,15 @@ function App() {
     getUsers();
   },[])
 
+  function validateForm() {
+    const password = document.getElementById("password");
+    const confirmPassword = document.getElementById("cpassword");
+  
+    if (password === confirmPassword) {
+      alert("Passwords do not match!");
+    }
+  }
+
   return (
     <div className='inputfield'>
       <form onSubmit={handleSubmit}>
@@ -56,9 +67,9 @@ function App() {
         <input type="password" name="password"  onChange={handleForm}/><br/>
 
         <label>Confirm password</label>
-        <input type="password" name="cpassword" onChange={handleForm}/><br/>
+        <input type="password" name="cpassword"  onChange={handleForm}/><br/>
        
-        <input type="submit"/>
+        <input type="submit" onClick={validateForm}/>
       </form>
       {/* <div>
         <ul>
@@ -69,4 +80,4 @@ function App() {
   )
 }
 
-export default App;
+  export default App
