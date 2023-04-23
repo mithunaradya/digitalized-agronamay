@@ -1,79 +1,45 @@
-import React, { Component } from 'react';
+import './login.css';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
-class Login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      username: '',
-      password: ''
-    };
-  }
+function Login(){
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
 
-  handleChange = (e) => {
-    const { name, value } = e.target;
- 
-    this.setState({[name]: value });
-  }
-  
-  handleSubmit = (e) => {
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('/api/auth/login', this.state)
-      .then(res => {
-        //this is where we will do our authentication magic 
-        if (res.data.isValid === true) {
-          //if the user is valid go to home page/dashboard
-          window.location = '/dashboard';
-        } else {
-          //display error message
-          console.log('Username / password incorrect');
-        }
-      })
-      .catch(err => console.log(err));
-  }
 
-  showPassword = (e) => {
-    e.preventDefault();
-    let pwdInput = document.getElementById('password');
-    if (pwdInput.type === "password") {
-      pwdInput.type = "text";
-    } else {
-      pwdInput.type = "password";
+    // Validate form fields here.
+    if (!username || !password) {
+      const err = setErrorMessage("Both username and password are required.");
+      return(err);
     }
-  }
 
-  render() {
-    return (
-      <div>
-        <h1>Login</h1>
-        <form onSubmit={this.handleSubmit}>
-          <input 
-            type="text"
-            placeholder="Username"
-            name="username"
-            value={this.state.username}
-            onChange={this.handleChange}
-          />
-          <input 
-            type="password"
-            placeholder="Password"
-            id="password" 
-            name="password"
-            value={this.state.password}
-            onChange={this.handleChange}
-          />
-          <button type="button" onClick={this.showPassword}>
-          &#x1F441;
-          </button>
-          <Link to="/forgot">Forgot Password?</Link>
-          <button type="submit">Submit</button>
-        </form>
-      </div>
-    );
-  }
-}
+    // Submit data to backend.
+    console.log("Submitting login data...");
+  };
 
+  return (
+    <form onSubmit={handleSubmit}>
+      {errorMessage && <div className="error">{errorMessage}</div>}
+        <label htmlFor="username">Username</label>
+        <input type="text" onChange={handleUsernameChange} value={username} />
+        <label htmlFor="password">Password</label>
+        <input type="password" onChange={handlePasswordChange} value={password} />
+      <button type="submit">Login</button>
+      Not registered<Link to= "/signup">Register Now! </Link>
+      
+    </form>
+  )
+} 
 
 export default Login;
